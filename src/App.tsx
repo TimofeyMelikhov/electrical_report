@@ -35,38 +35,10 @@ export const App = () => {
 
   return (
     <div className="app">
-      <header className="app__header">
-        <p className="app__eyebrow">Отчет по электрике</p>
-        <h1 className="app__title">Контроль обучения, тестов и мероприятий</h1>
-        <p className="app__description">
-          Выберите нужные параметры, сформируйте отчет и при необходимости
-          выгрузите результат в Excel.
-        </p>
-      </header>
-
       {isLoadingFilters ? (
         <Preloader />
       ) : (
         <section className="filters-card">
-          <div className="filters-card__header">
-            <div>
-              <h2 className="filters-card__title">Фильтры отчета</h2>
-              <p className="filters-card__subtitle">
-                Фильтры применяются к текущему отчету, а выбор курса и теста
-                теперь участвует в запросе данных.
-              </p>
-            </div>
-
-            <button
-              className="btn btn--primary"
-              type="button"
-              onClick={handleCreateReport}
-              disabled={isLoading}
-            >
-              {isLoading ? "Формирование..." : "Сформировать отчет"}
-            </button>
-          </div>
-
           <div className="filters">
             <div className="filter-field">
               <span className="filter-field__label">Подразделение</span>
@@ -141,6 +113,14 @@ export const App = () => {
               </CustomProvider>
             </div>
           </div>
+          <button
+            className="btn btn--primary"
+            type="button"
+            onClick={handleCreateReport}
+            disabled={isLoading}
+          >
+            {isLoading ? "Формирование..." : "Сформировать отчет"}
+          </button>
         </section>
       )}
 

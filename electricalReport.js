@@ -150,7 +150,7 @@ function getFiltersData() {
   }
 }
 
-function getData(subdivision, positionName, selectedDate) {
+function getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest) {
   var subdivisionFilter = ""
   var positionNameFilters = ""
 
@@ -303,7 +303,9 @@ function handler(body, method, query) {
       var subdivision = body.GetOptProperty("selectedSubdivision");
       var positionName = body.GetOptProperty("positionName")
       var selectedDate = body.GetOptProperty("selectedDate")
-      var data = getData(subdivision, positionName, selectedDate)
+      var selectedCourse = body.GetOptProperty("selectedCourse")
+      var selectedTest = body.GetOptProperty("selectedTest")
+      var data = getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest)
       return { status: 200, body: data };
     }
     default:
