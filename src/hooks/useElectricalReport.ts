@@ -4,7 +4,7 @@ import axios from "axios";
 
 import type {
   IDateRange,
-  ISubdivisionAndCourseResponse,
+  IFilterSelection,
   IReportData,
   IFiltersData,
   IFilters,
@@ -22,17 +22,18 @@ export const useElectricalReport = () => {
   const [hasFetched, setHasFetched] = useState<boolean>(false);
   const [isLoadingFilters, setIsLoadingFilters] = useState<boolean>(false);
   const [filters, setFilters] = useState<IFilters | null>(null);
-  const [selectedSubdivision, setSelectedSubdivision] =
-    useState<ISubdivisionAndCourseResponse | null>(null);
+  const [selectedSubdivisions, setSelectedSubdivisions] =
+    useState<IFilterSelection | null>(null);
 
   const [selectedDate, setSelectedDate] = useState<IDateRange>({
     start_date: null,
     finish_date: null,
   });
-  const [selectedCourse, setSelectedCourse] =
-    useState<ISubdivisionAndCourseResponse | null>(null);
-  const [selectedTest, setSelectedTest] =
-    useState<ISubdivisionAndCourseResponse | null>(null);
+  const [selectedCourses, setSelectedCourses] =
+    useState<IFilterSelection | null>(null);
+  const [selectedTests, setSelectedTests] = useState<IFilterSelection | null>(
+    null,
+  );
   const [positionName, setPositionName] = useState<string>("");
   const [tableData, setTableData] = useState<IReportData[]>([]);
 
@@ -84,10 +85,17 @@ export const useElectricalReport = () => {
     setTableData([]);
     setHasFetched(false);
 
+    const firstSelectedSubdivision = selectedSubdivisions?.[0] ?? null;
+    const firstSelectedCourse = selectedCourses?.[0] ?? null;
+    const firstSelectedTest = selectedTests?.[0] ?? null;
+
     const data: IFiltersData = {
-      selectedSubdivision,
-      selectedCourse,
-      selectedTest,
+      selectedSubdivision: firstSelectedSubdivision,
+      selectedSubdivisions,
+      selectedCourse: firstSelectedCourse,
+      selectedCourses,
+      selectedTest: firstSelectedTest,
+      selectedTests,
       positionName,
       selectedDate,
     };
@@ -100,19 +108,19 @@ export const useElectricalReport = () => {
 
   return {
     isLoadingFilters,
-    selectedSubdivision,
+    selectedSubdivisions,
     isLoading,
     hasFetched,
     filters,
     positionName,
     tableData,
-    selectedCourse,
-    selectedTest,
-    setSelectedSubdivision,
+    selectedCourses,
+    selectedTests,
+    setSelectedSubdivisions,
     setSelectedDate,
     setPositionName,
     handleCreateReport,
-    setSelectedCourse,
-    setSelectedTest,
+    setSelectedCourses,
+    setSelectedTests,
   };
 };

@@ -17,16 +17,16 @@ export const App = () => {
     hasFetched,
     isLoading,
     isLoadingFilters,
-    selectedSubdivision,
+    selectedSubdivisions,
     filters,
     positionName,
     tableData,
-    selectedCourse,
-    selectedTest,
-    setSelectedCourse,
-    setSelectedTest,
+    selectedCourses,
+    selectedTests,
+    setSelectedCourses,
+    setSelectedTests,
     setSelectedDate,
-    setSelectedSubdivision,
+    setSelectedSubdivisions,
     setPositionName,
     handleCreateReport,
   } = useElectricalReport();
@@ -44,9 +44,10 @@ export const App = () => {
               <span className="filter-field__label">Подразделение</span>
               <SimpleSelect<ISubdivisionAndCourseResponse>
                 placeholder="Все подразделения"
-                value={selectedSubdivision}
+                isMulti
+                value={selectedSubdivisions}
                 options={filters?.subdivisionList}
-                setOption={setSelectedSubdivision}
+                setOption={setSelectedSubdivisions}
                 className="simple"
                 valueKey="id"
                 labelKey="name"
@@ -57,9 +58,10 @@ export const App = () => {
               <span className="filter-field__label">Курс</span>
               <SimpleSelect<ISubdivisionAndCourseResponse>
                 placeholder="Все курсы"
-                value={selectedCourse}
+                isMulti
+                value={selectedCourses}
                 options={filters?.coursesList}
-                setOption={setSelectedCourse}
+                setOption={setSelectedCourses}
                 className="simple"
                 valueKey="id"
                 labelKey="name"
@@ -70,9 +72,10 @@ export const App = () => {
               <span className="filter-field__label">Тест</span>
               <SimpleSelect<ISubdivisionAndCourseResponse>
                 placeholder="Все тесты"
-                value={selectedTest}
+                isMulti
+                value={selectedTests}
                 options={filters?.testsList}
-                setOption={setSelectedTest}
+                setOption={setSelectedTests}
                 className="simple"
                 valueKey="id"
                 labelKey="name"

@@ -21,6 +21,7 @@ export const SimpleSelect = <T extends IBaseOption>(
     options,
     placeholder,
     className,
+    valueKey,
     labelKey,
     disabled,
     isMulti,
@@ -78,6 +79,8 @@ export const SimpleSelect = <T extends IBaseOption>(
         isMulti={isMulti}
         isClearable
         isDisabled={disabled}
+        closeMenuOnSelect={!isMulti}
+        getOptionValue={(option) => String(option.value[valueKey])}
         value={selectValue}
         onChange={handleChange}
       />

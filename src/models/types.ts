@@ -8,10 +8,15 @@ export interface ISubdivisionAndCourseResponse {
   name: string;
 }
 
+export type IFilterSelection = ISubdivisionAndCourseResponse[];
+
 export interface IFiltersData {
   selectedSubdivision?: ISubdivisionAndCourseResponse | null;
+  selectedSubdivisions?: IFilterSelection | null;
   selectedCourse?: ISubdivisionAndCourseResponse | null;
+  selectedCourses?: IFilterSelection | null;
   selectedTest?: ISubdivisionAndCourseResponse | null;
+  selectedTests?: IFilterSelection | null;
   selectedDate?: IDateRange | null;
   positionName?: string | null;
 }

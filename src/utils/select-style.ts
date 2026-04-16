@@ -17,6 +17,7 @@ export const getSelectStyle = <T extends IBaseOption>(): StylesConfig<
   control: (base, state) => ({
     ...base,
     minHeight: "48px",
+    paddingBlock: "2px",
     border: `1px solid ${state.isFocused ? "#0b63ce" : "#b9c8da"}`,
     boxShadow: state.isFocused ? "0 0 0 4px rgba(11, 99, 206, 0.12)" : "none",
     borderRadius: "14px",
@@ -34,8 +35,14 @@ export const getSelectStyle = <T extends IBaseOption>(): StylesConfig<
   }),
   valueContainer: (base) => ({
     ...base,
-    padding: "2px 12px",
+    gap: "4px",
+    padding: "4px 12px",
     fontSize: "15px",
+  }),
+  input: (base) => ({
+    ...base,
+    margin: 0,
+    paddingBlock: 0,
   }),
   indicatorSeparator: (base) => ({
     ...base,
@@ -78,15 +85,18 @@ export const getSelectStyle = <T extends IBaseOption>(): StylesConfig<
   multiValue: (base) => ({
     ...base,
     borderRadius: "8px",
+    margin: "2px 4px 2px 0",
     backgroundColor: "#e8f0fb",
   }),
   multiValueLabel: (base) => ({
     ...base,
+    padding: "4px 6px 4px 8px",
     color: "#0b63ce",
     fontWeight: 600,
   }),
   multiValueRemove: (base) => ({
     ...base,
+    paddingInline: "6px",
     color: "#0b63ce",
     "&:hover": {
       backgroundColor: "#d7e6f7",
