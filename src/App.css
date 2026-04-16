@@ -1,0 +1,131 @@
+@import "rsuite/dist/rsuite.css";
+.app {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: white;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.infos {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 60px 0 0;
+}
+
+.rs-input-group.rs-input-group-inside .rs-input {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  height: 40px;
+}
+.rs-input-group.rs-input-group-inside {
+  border-radius: 2px;
+  width: 92%;
+  border: 2px solid hsl(0, 0%, 75%);
+  margin-top: 20px;
+}
+
+.dates {
+  display: flex;
+  flex-direction: column;
+  max-width: 280px;
+  margin-bottom: 20px;
+}
+.btn-box {
+  width: 100%;
+  margin: 20px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom: 2px solid #bcbbbc;
+  padding-bottom: 20px;
+}
+.btn {
+  color: white;
+  padding: 12px;
+  margin-right: 40px;
+  border-radius: 4px;
+  background-color: #3e77f0;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #4d85fd;
+}
+.btn:disabled {
+  color: gray;
+  background-color: rgb(232, 232, 238);
+  border: none;
+}
+.rs-picker-toggle-wrapper {
+  max-width: 283px;
+}
+.rs-input-group.rs-input-group-inside .rs-input {
+  height: 37px;
+}
+.rs-input-group:not(.rs-input-group-disabled):hover,
+.rs-input-group:not(.rs-input-group-disabled).rs-input-group-focus,
+.rs-input-group:focus-within {
+  border-color: #3498ff;
+  border-color: var(--rs-input-focus-border);
+}
+.rs-picker-toggle-wrapper {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.warning {
+  font-size: 18px;
+  text-align: center;
+}
+
+.rs-input-group.rs-input-group-inside {
+  max-width: 283px !important;
+  max-height: 41px !important;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #f4f3f4;
+}
+
+footer {
+  flex: 0 0 auto;
+}
+
+.page-content {
+  flex: 1 0 auto;
+}
+
+#wt-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.table__subtitle {
+  margin: 0;
+}
+
+.missing {
+  text-align: center;
+  color: rgb(231, 135, 135);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}

@@ -1,0 +1,31 @@
+.ExcelTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 40px 0;
+  font-size: 14px;
+}
+
+.ExcelTable__thead th,
+.ExcelTable__thead td,
+.tbody__td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+/* .ExcelTable__tr:nth-child(even) .tbody__td {
+  background-color: #f2f2f2;
+} */
+
+.ExcelTable__tr:hover .tbody__td {
+  background-color: #ddd;
+}
+
+.ExcelTable__th,
+tfoot td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #f0f0f0;
+  color: rgb(0, 0, 0);
+}
