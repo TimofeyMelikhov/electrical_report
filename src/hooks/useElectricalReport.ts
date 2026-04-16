@@ -11,6 +11,12 @@ import type {
 } from "@/models/types";
 import { env } from "@/config/global";
 
+const api = axios.create({
+  baseURL: `${env.apiBaseUrl}?object_id=${env.objectId}`,
+  headers: { "Content-Type": "application/json" },
+  timeout: 100000,
+});
+
 export const useElectricalReport = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasFetched, setHasFetched] = useState<boolean>(false);
@@ -29,12 +35,6 @@ export const useElectricalReport = () => {
     useState<ISubdivisionAndCourseResponse | null>(null);
   const [positionName, setPositionName] = useState<string>("");
   const [tableData, setTableData] = useState<IReportData[]>([]);
-
-  const api = axios.create({
-    baseURL: `${env.apiBaseUrl}?object_id=${env.objectId}`,
-    headers: { "Content-Type": "application/json" },
-    timeout: 100000,
-  });
 
   useEffect(() => {
     const loadFilters = async () => {
@@ -83,11 +83,15 @@ export const useElectricalReport = () => {
   const handleCreateReport = () => {
     setTableData([]);
     setHasFetched(false);
+
     const data: IFiltersData = {
       selectedSubdivision,
+      selectedCourse,
+      selectedTest,
       positionName,
       selectedDate,
     };
+
     postReport("getData", data, (result) => {
       setHasFetched(true);
       setTableData(Array.isArray(result) && result.length > 0 ? result : []);

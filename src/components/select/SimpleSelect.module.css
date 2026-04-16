@@ -1,19 +1,8 @@
-.select {
-  max-width: 320px;
-  margin: 20px 0;
-}
-
-.form__select {
-  width: 100%;
-  margin-top: 5px;
-}
-
-.simple {
-  /* width: 24%; */
-  margin-top: 20px;
-}
-
+.select,
+.form__select,
+.simple,
 .quota_select {
-  max-width: 320px;
-  margin: 0 32px 0 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
