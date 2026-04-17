@@ -59,7 +59,7 @@ export const SimpleSelect = <T extends IBaseOption>(
     if (props.isMulti) {
       const multiValue = isMultiValue(selected)
         ? selected.map((item) => item.value)
-        : null;
+        : [];
 
       props.setOption(multiValue);
       return;

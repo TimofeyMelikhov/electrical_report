@@ -35,6 +35,12 @@ export const App = () => {
 
   return (
     <div className="app">
+      <header className="app__header">
+        <h1 className="app__title">
+          {"\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u044d\u043b\u0435\u043a\u0442\u0440\u0438\u043a\u0435"}
+        </h1>
+      </header>
+
       {isLoadingFilters ? (
         <Preloader />
       ) : (
