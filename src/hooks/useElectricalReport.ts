@@ -85,17 +85,10 @@ export const useElectricalReport = () => {
     setTableData([]);
     setHasFetched(false);
 
-    const firstSelectedSubdivision = selectedSubdivisions?.[0] ?? null;
-    const firstSelectedCourse = selectedCourses?.[0] ?? null;
-    const firstSelectedTest = selectedTests?.[0] ?? null;
-
     const data: IFiltersData = {
-      selectedSubdivision: firstSelectedSubdivision,
-      selectedSubdivisions,
-      selectedCourse: firstSelectedCourse,
-      selectedCourses,
-      selectedTest: firstSelectedTest,
-      selectedTests,
+      selectedSubdivisions: selectedSubdivisions ? selectedSubdivisions : [],
+      selectedCourses: selectedCourses ? selectedCourses : [],
+      selectedTests: selectedTests ? selectedTests : [],
       positionName,
       selectedDate,
     };

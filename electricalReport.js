@@ -46,8 +46,8 @@ function throwHttpError(errorObject) {
 }
 
 var logConfig = {
-  code: "person_grade_dashboard_log",
-  type: "person_grade_dashboard",
+  code: "electrical_report_log",
+  type: "electrical_report",
   id: customWebTemplate.id
 }
 
@@ -60,7 +60,7 @@ function log(message, type) {
 
   var log = "["+type+"]["+logConfig.type+"]["+logConfig.id+"]: "+message;
 
-  if(DEV_MODE) {
+  if(!DEV_MODE) {
     alert(log)
   } else {
     EnableLog(logConfig.code, true)
@@ -151,11 +151,17 @@ function getFiltersData() {
 }
 
 function getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest) {
+  var defaultCourseIds = ['6489262742520006128', '6177338303158769492', '6157929239065026834'];
+  var defaultTestIds = ['6334554782428837454', '6334555253924642396'];
   var subdivisionFilter = ""
   var positionNameFilters = ""
+  var selectedCoursesId = ""
+  var selectedTestsId = ""
 
-  if(subdivision !== null) {
-    subdivisionFilter = "AND c.position_parent_id = " + subdivision.id
+  if(ArrayCount(subdivision) > 0) {
+    var ids = ArrayExtractKeys(subdivision, 'id')
+    var idsString = ids.join(', ');
+    subdivisionFilter = "AND c.position_parent_id IN (" + idsString + ")"
   }
 
   if(positionName !== '') {
@@ -178,20 +184,36 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
 
   var eventDateFilter = "";
   if (!IsEmptyValue(selectedDate.start_date) || !IsEmptyValue(selectedDate.finish_date)) {
-      var eventConditions = [];
-      if (!IsEmptyValue(selectedDate.start_date)) {
-        eventConditions.push("ec.start_date >= '" + selectedDate.start_date + "'");
-      }
-      if (!IsEmptyValue(selectedDate.finish_date)) {
-        eventConditions.push("ec.start_date <= '" + selectedDate.finish_date + "'");
-      }
-      if (eventConditions.length > 0) {
-        eventDateFilter = " AND " + eventConditions.join(" AND ");
-      }
+    var eventConditions = [];
+    if (!IsEmptyValue(selectedDate.start_date)) {
+      eventConditions.push("ec.start_date >= '" + selectedDate.start_date + "'");
+    }
+    if (!IsEmptyValue(selectedDate.finish_date)) {
+      eventConditions.push("ec.start_date <= '" + selectedDate.finish_date + "'");
+    }
+    if (eventConditions.length > 0) {
+      eventDateFilter = " AND " + eventConditions.join(" AND ");
+    }
+  }
+
+  if (ArrayCount(selectedCourse) > 0) {
+    var courseIds = ArrayExtractKeys(selectedCourse, 'id');
+    var courseIdsString = courseIds.join(', ');
+    selectedCoursesId = "AND src.course_id IN (" + courseIdsString + ")";
+  } else {
+    selectedCoursesId = "AND src.course_id IN ('" + defaultCourseIds.join("', '") + "')";
+  }
+
+  if (ArrayCount(selectedTest) > 0) {
+    var testIds = ArrayExtractKeys(selectedTest, 'id');
+    var testIdsString = testIds.join(', ');
+    selectedTestsId = "AND src.assessment_id IN (" + testIdsString + ")";
+  } else {
+    selectedTestsId = "AND src.assessment_id IN ('" + defaultTestIds.join("', '") + "')";
   }
 
   var strQuery = "\
-    SELECT TOP 10\
+    SELECT TOP 100\
       c.fullname AS fullname,\
       c.code AS code,\
       c.position_parent_name AS positionParentName,\
@@ -219,13 +241,13 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
     ) src\
     JOIN collaborators c ON src.person_id = c.id\
     WHERE c.is_dismiss = 0\
-      AND src.course_id = '6489262742520006128'\
       AND c.org_id = '7364654937381434225'\
       " + subdivisionFilter + "\
       " + positionNameFilters + "\
       " + dateFilter + "\
+      " + selectedCoursesId + "\
     UNION ALL\
-    SELECT TOP 10\
+    SELECT TOP 100\
       c.fullname AS fullname,\
       c.code AS code,\
       c.position_parent_name AS positionParentName,\
@@ -253,13 +275,13 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
     ) src\
     JOIN collaborators c ON src.person_id = c.id\
     WHERE c.is_dismiss = 0\
-      AND src.assessment_id IN ('6334554782428837454', '6334555253924642396')\
       AND c.org_id = '7364654937381434225'\
       " + subdivisionFilter + "\
       " + positionNameFilters + "\
       " + dateFilter + "\
+      " + selectedTestsId + "\
     UNION ALL\
-    SELECT TOP 10\
+    SELECT TOP 100\
       c.fullname AS fullname,\
       c.code AS code,\
       c.position_parent_name AS positionParentName,\
@@ -300,11 +322,12 @@ function handler(body, method, query) {
       return { status: 200, body: data };
     }
     case 'getData': {
-      var subdivision = body.GetOptProperty("selectedSubdivision");
+      var subdivision = body.GetOptProperty("selectedSubdivisions");
       var positionName = body.GetOptProperty("positionName")
       var selectedDate = body.GetOptProperty("selectedDate")
-      var selectedCourse = body.GetOptProperty("selectedCourse")
-      var selectedTest = body.GetOptProperty("selectedTest")
+      var selectedCourse = body.GetOptProperty("selectedCourses")
+      var selectedTest = body.GetOptProperty("selectedTests")
+
       var data = getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest)
       return { status: 200, body: data };
     }
