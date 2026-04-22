@@ -34,7 +34,7 @@ export const ExcelTable = ({ data }: ExcelTableProps) => {
         <button
           className={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.exportButton}`}
           type="button"
-          onClick={() => exportElectricalReport(data)}
+          onClick={() => void exportElectricalReport(data)}
         >
           Экспорт в Excel
         </button>

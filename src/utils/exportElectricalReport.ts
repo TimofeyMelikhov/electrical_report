@@ -1,5 +1,3 @@
-import * as XLSX from "xlsx";
-
 import { reportColumnConfig } from "@/components/table/columns";
 import type { IReportData } from "@/models/types";
 
@@ -12,7 +10,8 @@ const createFileStamp = () => {
   return `${year}-${month}-${day}`;
 };
 
-export const exportElectricalReport = (data: IReportData[]) => {
+export const exportElectricalReport = async (data: IReportData[]) => {
+  const XLSX = await import("xlsx");
   const headerRow = reportColumnConfig.map(({ header }) => header);
   const bodyRows = data.map((row) =>
     reportColumnConfig.map(({ key }) => row[key] ?? ""),

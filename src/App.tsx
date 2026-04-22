@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { CustomProvider, DateRangePicker } from "rsuite";
 import "rsuite/DateRangePicker/styles/index.css";
 import ru from "rsuite/locales/ru_RU";
@@ -6,12 +7,17 @@ import type { IFiltersResponse } from "@/models/types";
 
 import { Preloader } from "@/components/preloader/Preloader";
 import { SimpleSelect } from "@/components/select/SimpleSelect";
-import { ExcelTable } from "@/components/table/ExcelTable";
 import { handleDateRangeChange } from "@/utils/handleDateRangeChange";
 import buttonStyles from "@/styles/Button.module.css";
 
 import { useElectricalReport } from "./hooks/useElectricalReport";
 import styles from "./App.module.css";
+
+const LazyExcelTable = lazy(() =>
+  import("@/components/table/ExcelTable").then((module) => ({
+    default: module.ExcelTable,
+  })),
+);
 
 export const App = () => {
   const {
@@ -151,7 +157,11 @@ export const App = () => {
 
       {isLoading && <Preloader />}
 
-      {hasTableData && <ExcelTable data={tableData} />}
+      {hasTableData && (
+        <Suspense fallback={<Preloader />}>
+          <LazyExcelTable data={tableData} />
+        </Suspense>
+      )}
 
       {hasFetched && !hasTableData && (
         <p className={styles.warning}>
