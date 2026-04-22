@@ -5,10 +5,11 @@ import {
 } from "@tanstack/react-table";
 
 import type { IReportData } from "@/models/types";
+import buttonStyles from "@/styles/Button.module.css";
 import { exportElectricalReport } from "@/utils/exportElectricalReport";
 
 import { columnDef } from "./columns";
-import "./table.css";
+import styles from "./ExcelTable.module.css";
 
 interface ExcelTableProps {
   data: IReportData[];
@@ -23,15 +24,15 @@ export const ExcelTable = ({ data }: ExcelTableProps) => {
   });
 
   return (
-    <section className="table-card">
-      <div className="table-card__toolbar">
+    <section className={styles.tableCard}>
+      <div className={styles.toolbar}>
         <div>
-          <h2 className="table-card__title">Результаты отчета</h2>
-          <p className="table-card__meta">Найдено записей: {data.length}</p>
+          <h2 className={styles.title}>Результаты отчета</h2>
+          <p className={styles.meta}>Найдено записей: {data.length}</p>
         </div>
 
         <button
-          className="btn btn--secondary"
+          className={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.exportButton}`}
           type="button"
           onClick={() => exportElectricalReport(data)}
         >
@@ -39,14 +40,14 @@ export const ExcelTable = ({ data }: ExcelTableProps) => {
         </button>
       </div>
 
-      <div className="table-card__scroll">
-        <table className="ExcelTable">
-          <thead className="ExcelTable__thead">
+      <div className={styles.scroll}>
+        <table className={styles.table}>
+          <thead className={styles.thead}>
             {tableInstance.getHeaderGroups().map((headerGroup) => (
-              <tr className="ExcelTable__tr" key={headerGroup.id}>
+              <tr className={styles.row} key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
-                    className="ExcelTable__th"
+                    className={styles.headerCell}
                     key={header.id}
                     colSpan={header.colSpan}
                   >
@@ -60,11 +61,11 @@ export const ExcelTable = ({ data }: ExcelTableProps) => {
             ))}
           </thead>
 
-          <tbody className="ExcelTable__tbody">
+          <tbody className={styles.tbody}>
             {tableInstance.getRowModel().rows.map((row) => (
-              <tr className="ExcelTable__tr" key={row.id}>
+              <tr className={styles.row} key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td className="tbody__td" key={cell.id}>
+                  <td className={styles.bodyCell} key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

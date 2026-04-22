@@ -2,15 +2,16 @@ import { CustomProvider, DateRangePicker } from "rsuite";
 import "rsuite/DateRangePicker/styles/index.css";
 import ru from "rsuite/locales/ru_RU";
 
-import type { ISubdivisionAndCourseResponse } from "@/models/types";
+import type { IFiltersResponse } from "@/models/types";
 
 import { Preloader } from "@/components/preloader/Preloader";
 import { SimpleSelect } from "@/components/select/SimpleSelect";
 import { ExcelTable } from "@/components/table/ExcelTable";
 import { handleDateRangeChange } from "@/utils/handleDateRangeChange";
+import buttonStyles from "@/styles/Button.module.css";
 
 import { useElectricalReport } from "./hooks/useElectricalReport";
-import "./App.css";
+import styles from "./App.module.css";
 
 export const App = () => {
   const {
@@ -23,32 +24,32 @@ export const App = () => {
     tableData,
     selectedCourses,
     selectedTests,
+    selectedEvents,
     setSelectedCourses,
     setSelectedTests,
     setSelectedDate,
     setSelectedSubdivisions,
     setPositionName,
     handleCreateReport,
+    setSelectedEvents,
   } = useElectricalReport();
 
   const hasTableData = tableData.length > 0;
 
   return (
-    <div className="app">
-      <header className="app__header">
-        <h1 className="app__title">
-          {"\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u044d\u043b\u0435\u043a\u0442\u0440\u0438\u043a\u0435"}
-        </h1>
-      </header>
-
+    <div className={styles.app}>
       {isLoadingFilters ? (
         <Preloader />
       ) : (
-        <section className="filters-card">
-          <div className="filters">
-            <div className="filter-field">
-              <span className="filter-field__label">Подразделение</span>
-              <SimpleSelect<ISubdivisionAndCourseResponse>
+        <section className={styles.filtersCard}>
+          <h1 className={styles.filtersCardPageTitle}>
+            {"Отчет по электрике"}
+          </h1>
+
+          <div className={styles.filters}>
+            <div className={styles.filterField}>
+              <span className={styles.filterFieldLabel}>Подразделение</span>
+              <SimpleSelect<IFiltersResponse>
                 placeholder="Все подразделения"
                 isMulti
                 value={selectedSubdivisions}
@@ -60,9 +61,9 @@ export const App = () => {
               />
             </div>
 
-            <div className="filter-field">
-              <span className="filter-field__label">Курс</span>
-              <SimpleSelect<ISubdivisionAndCourseResponse>
+            <div className={styles.filterField}>
+              <span className={styles.filterFieldLabel}>Курс</span>
+              <SimpleSelect<IFiltersResponse>
                 placeholder="Все курсы"
                 isMulti
                 value={selectedCourses}
@@ -74,9 +75,9 @@ export const App = () => {
               />
             </div>
 
-            <div className="filter-field">
-              <span className="filter-field__label">Тест</span>
-              <SimpleSelect<ISubdivisionAndCourseResponse>
+            <div className={styles.filterField}>
+              <span className={styles.filterFieldLabel}>Тест</span>
+              <SimpleSelect<IFiltersResponse>
                 placeholder="Все тесты"
                 isMulti
                 value={selectedTests}
@@ -87,14 +88,27 @@ export const App = () => {
                 labelKey="name"
               />
             </div>
+            <div className={styles.filterField}>
+              <span className={styles.filterFieldLabel}>Мероприятия</span>
+              <SimpleSelect<IFiltersResponse>
+                placeholder="Все мероприятия"
+                isMulti
+                value={selectedEvents}
+                options={filters?.eventsList}
+                setOption={setSelectedEvents}
+                className="simple"
+                valueKey="id"
+                labelKey="name"
+              />
+            </div>
 
-            <div className="filter-field filter-field--wide">
-              <label className="filter-field__label" htmlFor="positionName">
+            <div className={`${styles.filterField} ${styles.filterFieldWide}`}>
+              <label className={styles.filterFieldLabel} htmlFor="positionName">
                 Должность
               </label>
               <input
                 id="positionName"
-                className="filters__input"
+                className={styles.input}
                 type="text"
                 placeholder="Введите должность"
                 value={positionName}
@@ -102,28 +116,30 @@ export const App = () => {
               />
             </div>
 
-            <div className="filter-field filter-field--wide">
-              <span className="filter-field__label">Период</span>
-              <CustomProvider locale={ru}>
-                <DateRangePicker
-                  block
-                  className="filters__date-picker"
-                  character=" по "
-                  placeholder="Дата с... по..."
-                  format="dd.MM.yyyy"
-                  onChange={(value) =>
-                    handleDateRangeChange(
-                      value as [Date, Date] | null,
-                      "start_date",
-                      setSelectedDate,
-                    )
-                  }
-                />
-              </CustomProvider>
+            <div className={`${styles.filterField} ${styles.filterFieldWide}`}>
+              <span className={styles.filterFieldLabel}>Период</span>
+              <div className={styles.datePicker}>
+                <CustomProvider locale={ru}>
+                  <DateRangePicker
+                    block
+                    character=" по "
+                    placeholder="Дата с... по..."
+                    format="dd.MM.yyyy"
+                    onChange={(value) =>
+                      handleDateRangeChange(
+                        value as [Date, Date] | null,
+                        "start_date",
+                        setSelectedDate,
+                      )
+                    }
+                  />
+                </CustomProvider>
+              </div>
             </div>
           </div>
+
           <button
-            className="btn btn--primary"
+            className={`${buttonStyles.button} ${buttonStyles.primary}`}
             type="button"
             onClick={handleCreateReport}
             disabled={isLoading}
@@ -138,7 +154,7 @@ export const App = () => {
       {hasTableData && <ExcelTable data={tableData} />}
 
       {hasFetched && !hasTableData && (
-        <p className="warning">
+        <p className={styles.warning}>
           Ничего не найдено. Попробуйте изменить фильтры и сформировать отчет
           заново.
         </p>

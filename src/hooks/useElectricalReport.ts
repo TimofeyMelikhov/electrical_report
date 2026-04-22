@@ -35,6 +35,9 @@ export const useElectricalReport = () => {
     null,
   );
   const [positionName, setPositionName] = useState<string>("");
+  const [selectedEvents, setSelectedEvents] = useState<IFilterSelection | null>(
+    null,
+  );
   const [tableData, setTableData] = useState<IReportData[]>([]);
 
   useEffect(() => {
@@ -72,8 +75,7 @@ export const useElectricalReport = () => {
       } catch (err) {
         console.error(`Ошибка при ${method}: `, err);
 
-        const errorMessage =
-          method === "getTableData" ? "Ничего не найдено" : null;
+        const errorMessage = method === "getData" ? "Ничего не найдено" : null;
         onSuccess(errorMessage);
       } finally {
         setIsLoading(false);
@@ -89,6 +91,7 @@ export const useElectricalReport = () => {
       selectedSubdivisions: selectedSubdivisions ? selectedSubdivisions : [],
       selectedCourses: selectedCourses ? selectedCourses : [],
       selectedTests: selectedTests ? selectedTests : [],
+      selectedEvents: selectedEvents ? selectedEvents : [],
       positionName,
       selectedDate,
     };
@@ -109,11 +112,13 @@ export const useElectricalReport = () => {
     tableData,
     selectedCourses,
     selectedTests,
+    selectedEvents,
     setSelectedSubdivisions,
     setSelectedDate,
     setPositionName,
     handleCreateReport,
     setSelectedCourses,
     setSelectedTests,
+    setSelectedEvents,
   };
 };

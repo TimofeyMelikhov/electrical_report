@@ -8,10 +8,8 @@ const createFileStamp = () => {
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, "0");
   const day = `${date.getDate()}`.padStart(2, "0");
-  const hours = `${date.getHours()}`.padStart(2, "0");
-  const minutes = `${date.getMinutes()}`.padStart(2, "0");
 
-  return `${year}-${month}-${day}_${hours}-${minutes}`;
+  return `${year}-${month}-${day}`;
 };
 
 export const exportElectricalReport = (data: IReportData[]) => {
@@ -34,5 +32,5 @@ export const exportElectricalReport = (data: IReportData[]) => {
 
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Отчет");
-  XLSX.writeFile(workbook, `electrical-report_${createFileStamp()}.xlsx`);
+  XLSX.writeFile(workbook, `Отчет по электрике ${createFileStamp()}.xlsx`);
 };

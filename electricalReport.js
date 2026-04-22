@@ -16,6 +16,72 @@ var curUserId = DEV_MODE
   ? OptInt("7079554317075315721") // id пользователя
   : OptInt(Request.Session.Env.curUserID);
 var curUser = DEV_MODE ? tools.open_doc(curUserId).TopElem : Request.Session.Env.curUser;
+var eventsList = [
+  {
+    id: 1,
+    name: 'электри'
+  },
+  {
+    id: 2,
+    name: 'кабел'
+  },
+  {
+    id: 3,
+    name: 'теплый пол'
+  },
+  {
+    id: 4,
+    name: 'гофр'
+  },
+  {
+    id: 5,
+    name: 'Модульн'
+  },
+  {
+    id: 6,
+    name: 'Электротехническ'
+  },
+  {
+    id: 7,
+    name: 'электроснабжен'
+  },
+  {
+    id: 8,
+    name: 'Освещени'
+  },
+  {
+    id: 9,
+    name: 'Свет'
+  },
+  {
+    id: 10,
+    name: 'Пожарн'
+  },
+  {
+    id: 11,
+    name: 'КНС'
+  },
+  {
+    id: 12,
+    name: 'молни'
+  },
+  {
+    id: 13,
+    name: 'щит'
+  },
+  {
+    id: 14,
+    name: 'Электроустановк'
+  },
+  {
+    id: 15,
+    name: 'Заземл'
+  },
+  {
+    id: 16,
+    name: 'Электроутанов'
+  }
+]
 
 /* --- utils --- */
 function getParam(name) {
@@ -146,17 +212,19 @@ function getFiltersData() {
   return {
     coursesList: coursesList,
     testsList: testsList,
-    subdivisionList: subdivisionList
+    subdivisionList: subdivisionList,
+    eventsList: eventsList
   }
 }
 
-function getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest) {
-  var defaultCourseIds = ['6489262742520006128', '6177338303158769492', '6157929239065026834'];
+function getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest, selectedEvent) {
+  var defaultCourseIds = ['6685212163836297874', '6823722664272347136', '6847006998186180746', '6847007036622718974', '7179953191711046630', '7376255060418044462'];
   var defaultTestIds = ['6334554782428837454', '6334555253924642396'];
   var subdivisionFilter = ""
   var positionNameFilters = ""
   var selectedCoursesId = ""
   var selectedTestsId = ""
+  var eventNameFilter = "";
 
   if(ArrayCount(subdivision) > 0) {
     var ids = ArrayExtractKeys(subdivision, 'id')
@@ -212,8 +280,28 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
     selectedTestsId = "AND src.assessment_id IN ('" + defaultTestIds.join("', '") + "')";
   }
 
+  if(ArrayCount(selectedEvent) > 0) {
+    var eventsName = ArrayExtractKeys(selectedEvent, 'name')
+    var likeConds = [];
+    for(item in eventsName) {
+      likeConds.push("LOWER(ec.name) LIKE LOWER('%" + item + "%')");
+    }
+    if (likeConds.length > 0) {
+      eventNameFilter = " AND (" + likeConds.join(" OR ") + ")";
+    }
+  } else {
+    var defaultEventsName = ArrayExtractKeys(eventsList, 'name')
+    var defaultLikeConds = [];
+    for(item in defaultEventsName) {
+      defaultLikeConds.push("LOWER(ec.name) LIKE LOWER('%" + item + "%')");
+    }
+    if (defaultLikeConds.length > 0) {
+      eventNameFilter = " AND (" + defaultLikeConds.join(" OR ") + ")";
+    }
+  }
+
   var strQuery = "\
-    SELECT TOP 100\
+    SELECT\
       c.fullname AS fullname,\
       c.code AS code,\
       c.position_parent_name AS positionParentName,\
@@ -247,7 +335,7 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
       " + dateFilter + "\
       " + selectedCoursesId + "\
     UNION ALL\
-    SELECT TOP 100\
+    SELECT\
       c.fullname AS fullname,\
       c.code AS code,\
       c.position_parent_name AS positionParentName,\
@@ -281,7 +369,7 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
       " + dateFilter + "\
       " + selectedTestsId + "\
     UNION ALL\
-    SELECT TOP 100\
+    SELECT\
       c.fullname AS fullname,\
       c.code AS code,\
       c.position_parent_name AS positionParentName,\
@@ -301,7 +389,7 @@ function getData(subdivision, positionName, selectedDate, selectedCourse, select
       JOIN event_results er ON er.person_id = c.id\
       WHERE c.is_dismiss = 0\
       AND c.org_id = '7364654937381434225'\
-      AND ec.name LIKE '%электрик%'\
+      " + eventNameFilter + " \
       " + subdivisionFilter + "\
       " + positionNameFilters + "\
       " + eventDateFilter + "\
@@ -327,8 +415,9 @@ function handler(body, method, query) {
       var selectedDate = body.GetOptProperty("selectedDate")
       var selectedCourse = body.GetOptProperty("selectedCourses")
       var selectedTest = body.GetOptProperty("selectedTests")
+      var selectedEvent = body.GetOptProperty("selectedEvents")
 
-      var data = getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest)
+      var data = getData(subdivision, positionName, selectedDate, selectedCourse, selectedTest, selectedEvent)
       return { status: 200, body: data };
     }
     default:

@@ -3,28 +3,27 @@ export interface IDateRange {
   finish_date: string | null;
 }
 
-export interface ISubdivisionAndCourseResponse {
+export interface IFiltersResponse {
   id: string;
   name: string;
 }
 
-export type IFilterSelection = ISubdivisionAndCourseResponse[];
+export type IFilterSelection = IFiltersResponse[];
 
 export interface IFiltersData {
-  selectedSubdivision?: ISubdivisionAndCourseResponse | null;
   selectedSubdivisions?: IFilterSelection | null;
-  selectedCourse?: ISubdivisionAndCourseResponse | null;
   selectedCourses?: IFilterSelection | null;
-  selectedTest?: ISubdivisionAndCourseResponse | null;
   selectedTests?: IFilterSelection | null;
   selectedDate?: IDateRange | null;
   positionName?: string | null;
+  selectedEvents: IFilterSelection | null;
 }
 
 export interface IFilters {
-  coursesList: ISubdivisionAndCourseResponse[];
-  testsList: ISubdivisionAndCourseResponse[];
-  subdivisionList: ISubdivisionAndCourseResponse[];
+  coursesList: IFiltersResponse[];
+  testsList: IFiltersResponse[];
+  subdivisionList: IFiltersResponse[];
+  eventsList: IFiltersResponse[];
 }
 
 export interface IReportData {
